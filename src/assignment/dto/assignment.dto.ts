@@ -1,9 +1,10 @@
-import { IsString, IsEmail, MinLength, IsDate } from 'class-validator';
+import { IsString, IsEmail, MinLength, IsDate, IsNotEmpty, IsEnum } from 'class-validator';
 import { GRADE } from '../enum';
 
 
  export class AssignmentDto {
   @IsString()
+    @IsNotEmpty()
   title: string;
 
   @IsString()
@@ -13,8 +14,10 @@ import { GRADE } from '../enum';
   deadline: Date;
 
    @IsString()
+     @IsNotEmpty()
   question: string;
 
   @IsString()
+    @IsEnum(GRADE)
   result: GRADE;
 }

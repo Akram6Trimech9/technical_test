@@ -7,7 +7,7 @@ export class CreateStudentDto {
    required: true
 })
   @IsString()
-    @IsNotEmpty()
+  @IsNotEmpty()
   classYear: string;
 
   @ApiProperty({
@@ -15,7 +15,7 @@ export class CreateStudentDto {
    required: true
 })
   @IsString()
-    @IsNotEmpty()
+  @IsNotEmpty()
   grade: string;
 
 }

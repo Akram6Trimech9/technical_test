@@ -1,4 +1,4 @@
-import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsString ,IsPhoneNumber} from 'class-validator';
 import { Gender } from '../enums';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -41,6 +41,7 @@ export class UserDto {
     required: true,
   })
   @IsEnum(Gender)
+    @IsNotEmpty()
   gender: Gender;
 
 
@@ -50,5 +51,6 @@ export class UserDto {
   })
   @IsString()
   @IsNotEmpty()
+  @IsPhoneNumber('TN')
   phoneNumber: string;
 }

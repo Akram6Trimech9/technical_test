@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { UserDto } from '../user/dto/user.dto';
@@ -45,13 +46,25 @@ export class TeacherController {
     return await this.teacherService.findAll();
  }
 
-  @Patch('assignStudent/:studentId/:teacherId')
+  @Patch(':teacherId/assign-student/:studentId')
   async assignStudent(@Param('studentId',ParseIntPipe ) studentId : number , @Param('teacherId',ParseIntPipe) teacherId : number ) : Promise<any> {
     return  this.teacherService.asignAStudent(teacherId, studentId);
  }
 
- @Patch('assignAssement/:assignmentId')
+ @Patch('assign-assignment/:assignmentId')
  async assignAssesment(@Param('assignmentId',ParseIntPipe ) assignmentId : number , @Body('studendsIds') studendsIds : number[] ) : Promise<any> {
-     return  await  this.teacherService.assignAnAssesmentToStudents(assignmentId,studendsIds);
- }
+   if (!Array.isArray(studendsIds)) {
+      throw new BadRequestException('studendsIds must be an array');
+    }
+
+     const hasInvalidId = studendsIds.some((id) => isNaN(id));
+    if (hasInvalidId) {
+      throw new BadRequestException('studendsIds must contain valid student id');
+    }
+
+    return await this.teacherService.assignAnAssesmentToStudents(
+      assignmentId,
+      studendsIds,
+    );
+  }
 }

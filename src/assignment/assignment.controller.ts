@@ -6,9 +6,8 @@ import { AssignmentInterface } from "./interfaces/assignment.interface";
 import { GRADE } from "./enum";
 import { Response } from "express";
 import { ApiTags } from "@nestjs/swagger";
-
-
-@ApiTags('assignment , answer , reports ')
+import { ParseDatePipe } from "src/pipes/pareseDatePipe";
+ @ApiTags('assignment , answer , reports ')
 @Controller('assignment')
 export class AssignmentController {
       constructor(private readonly assignmentService: AssignmentService) {}
@@ -19,23 +18,23 @@ export class AssignmentController {
   }
 
 
- @Patch('grade/:teacherId/:assignmentId')
+ @Patch(':assignmentId/grade/:teacherId')
  async gradeAnAssignment(@Param('teacherId',ParseIntPipe) teacherId: number,@Param('assignmentId',ParseIntPipe) assignmentId: number, @Body('grade') grade: GRADE){
  return this.assignmentService.gradeAnAssignment(teacherId, assignmentId,grade)
   }
 
-@Post('answer/:studentId/:assignmentId')
+@Post(':assignmentId/answer/:studentId')
  async answerToAnAssignment(@Param('studentId',ParseIntPipe) studentId: number,@Param('assignmentId',ParseIntPipe) assignmentId: number, @Body('response') response: string){
  return this.assignmentService.answerToAnAnswer(studentId, assignmentId,response)
   }
 
- @Patch('answer/grade/:assignmentId/:answerId')
+ @Patch(':assignmentId/answer/grade/:answerId')
  async gradeAnAnswer(@Param('answerId',ParseIntPipe) answerId: number, @Body('grade') grade: GRADE){
  return this.assignmentService.gradeAnAnswer( answerId,grade)
 }
 
 @Get('report/:teacherId')
-async getReport(@Param('teacherId',ParseIntPipe) teacherId: number,  @Query('date') date: Date){
+async getReport(@Param('teacherId',ParseIntPipe) teacherId: number,  @Query('date',ParseDatePipe) date: Date){
 return await  this.assignmentService.getTeacherReport(teacherId,date)
 }
 
